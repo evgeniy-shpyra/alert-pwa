@@ -1,0 +1,27 @@
+.wrapper {
+  background-color: #F2EFEB;
+  height: 100vh;
+  padding: 70px 24px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 20px;
+  color: #605E5C;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100% - 60px);
+}
+
+.infoBlock{
+  display: flex;
+  gap: 10px;
+}
