@@ -1,17 +1,15 @@
 import React from 'react'
 import styles from './alerts.module.scss'
 import AlertsItem from './AlertsItem.jsx'
+import { useSelector } from 'react-redux'
 
-const data = [
-  { id: 1, name: 'Повітряна тривога', lastTime: '07.04 4.52', isActive: true },
-  { id: 2, name: 'Хімічна небезпека', lastTime: '07.04 4.52', isActive: false },
-  { id: 3, name: 'Радіаційна небезпека', lastTime: '', isActive: false },
-]
 
 const Alerts = () => {
+  const actions = useSelector((state) => state.action.actions)
+
   return (
     <div className={styles.alerts}>
-      {data.map((item) => (
+      {actions.map((item) => (
         <AlertsItem
           key={item.id}
           name={item.name}
