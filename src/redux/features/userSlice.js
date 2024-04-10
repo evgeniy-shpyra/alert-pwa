@@ -26,7 +26,6 @@ export const userSlice = createSlice({
     builder.addCase(fetchUser.fulfilled, (state, { payload }) => {
       state.isLoading = false
       state.isAuthorized = true
-      console.log("fulfilled", payload)
     })
     builder.addCase(fetchUser.pending, (state, action) => {
       state.isAuthorized = null

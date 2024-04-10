@@ -9,7 +9,7 @@ const MainPage = () => {
 
   return (
     <main className={styles.wrapper}>
-      <div className={styles.title}>Menu</div>
+      <div className={styles.title}>Меню</div>
       <div className={styles.content}>
         <div className={styles.infoBlock}>
           <DevicesInfo />

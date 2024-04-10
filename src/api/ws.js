@@ -17,7 +17,6 @@ const ws = (handlers = {}) => {
   })
 
   socket.addEventListener('message', (event) => {
-    console.log('Message from server ', event.data)
     onMessage && onMessage(event.data)
   })
 }

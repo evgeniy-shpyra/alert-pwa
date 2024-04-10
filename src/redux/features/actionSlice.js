@@ -20,7 +20,14 @@ const initialState = {
 export const actionSlice = createSlice({
   name: 'action',
   initialState,
-  reducers: {},
+  reducers: {
+    changeMissileStatus: (state, { payload }) => {
+      state.actions = state.actions.map((a) => {
+        if (a.id === payload.id) a.status = payload.status
+        return a
+      })
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchActions.fulfilled, (state, { payload }) => {
       state.isLoading = false
@@ -35,7 +42,6 @@ export const actionSlice = createSlice({
   },
 })
 
-// Action creators are generated for each case reducer function
-// export const { increment, decrement, incrementByAmount } = deviceSlice.actions
+export const { changeMissileStatus } = actionSlice.actions
 
 export default actionSlice.reducer

@@ -1,0 +1,28 @@
+.wrapper {
+  background-color: #f2efeb;
+  height: 100vh;
+  padding: 70px 24px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.goToBack{
+  position: absolute;
+  top: 46px;
+  left: 24px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 20px;
+  color: #605e5c;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100% - 60px);
+}

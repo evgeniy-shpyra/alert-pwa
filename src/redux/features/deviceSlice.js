@@ -20,10 +20,18 @@ const initialState = {
 export const deviceSlice = createSlice({
   name: 'device',
   initialState,
-  reducers: {},
+  reducers: {
+    toggleDeviceOnline: (state, { payload }) => {
+      state.devices = state.devices.map((d) => {
+        if (d.id == payload.id) d.isOnline = payload.isOnline
+        return d
+      })
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchDevices.fulfilled, (state, { payload }) => {
       state.isLoading = false
+      console.log(payload)
       state.devices = payload
     })
     builder.addCase(fetchDevices.pending, (state, action) => {
@@ -35,7 +43,6 @@ export const deviceSlice = createSlice({
   },
 })
 
-// Action creators are generated for each case reducer function
-// export const { increment, decrement, incrementByAmount } = deviceSlice.actions
+export const { toggleDeviceOnline } = deviceSlice.actions
 
 export default deviceSlice.reducer

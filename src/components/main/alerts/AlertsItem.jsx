@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './alerts.module.scss'
 
-const AlertsItem = ({ name, lastTime, isActive }) => {
+const AlertsItem = ({ name, lastTime, status }) => {
   return (
     <div className={styles.item}>
       <div className={styles.column_left}>
@@ -9,11 +9,12 @@ const AlertsItem = ({ name, lastTime, isActive }) => {
         <div className={styles.last_time}>{lastTime}</div>
       </div>
       <div className={styles.column_right}>
-        <div className={`${styles.status} ${isActive ? styles.active : ''}`}>
-          Активна
+        <div className={`${styles.status} ${status ? styles.active : ''}`}>
+          
+          {status ? 'Активна' : 'Не активна'}
         </div>
-        <button className={`${styles.button} ${isActive ? styles.active : ''}`}>
-          {isActive ? 'Вимкнути' : 'Увімкнути'}
+        <button className={`${styles.button} ${status ? styles.active : ''}`}>
+          {status ? 'Вимкнути' : 'Увімкнути'}
         </button>
       </div>
     </div>

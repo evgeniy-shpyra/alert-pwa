@@ -5,16 +5,30 @@ import MainPage from './pages/main/MainPage'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchUser } from './redux/features/userSlice'
 import Loading from './components/loading/Loading'
-import { fetchDevices } from './redux/features/deviceSlice'
+import { fetchDevices, toggleDeviceOnline } from './redux/features/deviceSlice'
 import ws from './api/ws'
-import { fetchActions } from './redux/features/actionSlice'
+import { changeMissileStatus, fetchActions } from './redux/features/actionSlice'
 
 const wsHandler = (dispatch) => {
   const onOpen = () => {
     console.log('WS: ok')
   }
   const onMessage = (message) => {
-    console.log('message', message)
+    const data = JSON.parse(message)
+    const payload = data.payload
+
+    switch (data.action) {
+      case 'threat':
+        dispatch(
+          changeMissileStatus({ id: payload.id, status: payload.status })
+        )
+        break
+      case 'deviceOnline':
+        dispatch(
+          toggleDeviceOnline({ id: payload.id, isOnline: payload.isOnline })
+        )
+        break
+    }
   }
   const onError = () => {}
 
@@ -39,7 +53,7 @@ const App = () => {
 
   React.useEffect(() => {
     if (isAuthorized !== true) return
-    wsHandler()
+    wsHandler(dispatch)
   }, [isAuthorized])
 
   React.useEffect(() => {

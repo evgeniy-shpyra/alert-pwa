@@ -14,7 +14,7 @@ const Alerts = () => {
           key={item.id}
           name={item.name}
           lastTime={item.lastTime}
-          isActive={item.isActive}
+          status={item.status}
         />
       ))}
     </div>
