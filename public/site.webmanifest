@@ -13,6 +13,18 @@
             "type": "image/png"
         }
     ],
+    "screenshots": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "1280x720",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "1280x720",
+            "type": "image/png"
+        }
+    ],
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "display": "standalone"
