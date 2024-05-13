@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    restart: always
+    ports:
+      - 3000:3000
