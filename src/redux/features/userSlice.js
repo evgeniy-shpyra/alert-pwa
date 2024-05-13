@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { fetchUserApi } from '../../api/user'
 
 export const fetchUser = createAsyncThunk(
-  'user/get-user',
+  'user/get',
   async (_, thunkApi) => {
     const [errors, payload] = await fetchUserApi()
     if (errors) {

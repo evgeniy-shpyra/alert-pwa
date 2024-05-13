@@ -1,7 +1,7 @@
-import { urlHttp } from '.'
+import { urlHttp } from './index.js'
 
-export const fetchActionsApi = async () => {
-  const response = await fetch(`${urlHttp}/actions`)
+export const fetchSensorsApi = async () => {
+  const response = await fetch(`${urlHttp}/sensors`)
   const payload = await response.json()
 
   if (response.status !== 200 || payload.error) {

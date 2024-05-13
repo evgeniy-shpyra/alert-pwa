@@ -1,33 +1,37 @@
 import React from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import DevicePage from './pages/device/DevicePage'
-import MainPage from './pages/main/MainPage'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchUser } from './redux/features/userSlice'
 import Loading from './components/loading/Loading'
-import { fetchDevices, toggleDeviceOnline } from './redux/features/deviceSlice'
+import { fetchDevices, setDeviceStatus } from './redux/features/deviceSlice'
 import ws from './api/ws'
-import { changeMissileStatus, fetchActions } from './redux/features/actionSlice'
+import { fetchActions } from './redux/features/actionSlice'
+import Menu from './components/menu/Menu.jsx'
+import { fetchSensors } from './redux/features/sensorSlice.js'
 
 const wsHandler = (dispatch) => {
   const onOpen = () => {
     console.log('WS: ok')
   }
   const onMessage = (message) => {
+    console.log(message)
     const data = JSON.parse(message)
     const payload = data.payload
 
     switch (data.action) {
-      case 'threat':
-        dispatch(
-          changeMissileStatus({ id: payload.id, status: payload.status })
-        )
+      case 'deviceStatus':
+        dispatch(setDeviceStatus({ id: payload.id, status: payload.status }))
         break
-      case 'deviceOnline':
-        dispatch(
-          toggleDeviceOnline({ id: payload.id, isOnline: payload.isOnline })
-        )
-        break
+      //   case 'threat':
+      //     dispatch(
+      //       changeMissileStatus({ id: payload.id, status: payload.status })
+      //     )
+      //     break
+      //   case 'deviceOnline':
+      //     dispatch(
+      //       toggleDeviceOnline({ id: payload.id, isOnline: payload.isOnline })
+      //     )
+      //     break
     }
   }
   const onError = () => {}
@@ -43,11 +47,13 @@ const App = () => {
     (state) => state.user
   )
   const isLoadingDevice = useSelector((state) => state.device.isLoading)
+  const isLoadingSensor = useSelector((state) => state.sensor.isLoading)
   const isLoadingAction = useSelector((state) => state.action.isLoading)
 
   React.useEffect(() => {
     dispatch(fetchUser())
     dispatch(fetchDevices())
+    dispatch(fetchSensors())
     dispatch(fetchActions())
   }, [])
 
@@ -60,14 +66,13 @@ const App = () => {
     if (isAuthorized === false) navigate('/login')
   }, [isAuthorized])
 
-  if (isLoadingUser || isLoadingDevice || isLoadingAction) {
+  if (isLoadingUser || isLoadingDevice || isLoadingAction || isLoadingSensor) {
     return <Loading />
   }
 
   return (
     <Routes>
-      <Route path='/' element={<MainPage />} />
-      <Route path='/device' element={<DevicePage />} />
+      <Route path='/' element={<Menu />} />
     </Routes>
   )
 }
