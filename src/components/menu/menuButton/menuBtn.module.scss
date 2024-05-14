@@ -13,9 +13,10 @@
   gap: 20px;
   padding: 50px 20px 20px 20px;
   overflow-x: scroll;
+  transition: 0.1s;
+
   -ms-overflow-style: none;
   scrollbar-width: none;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -26,6 +27,7 @@
   font-size: 16px;
   color: #757575;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .opened {

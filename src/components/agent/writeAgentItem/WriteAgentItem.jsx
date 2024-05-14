@@ -5,9 +5,11 @@ import Switch from '../../switch/Switch'
 import { useDispatch } from 'react-redux'
 import { changeDeviceStatus } from '../../../redux/features/deviceSlice'
 
+
 const WriteAgentItem = ({ name, id, status }) => {
   const dispatch = useDispatch()
   const [isLock, setIsLock] = React.useState(false)
+  
 
   const handleToggleStatus = async () => {
     setIsLock(true)
@@ -15,16 +17,12 @@ const WriteAgentItem = ({ name, id, status }) => {
     setIsLock(false)
   }
 
-  const handleSettingsClick = () => {
-    
-  }
-
 
   return (
     <ItemWrapper
       name={name}
       isOnline={status !== null}
-      onSettingsClick={handleSettingsClick}
+      // onSettingsClick={handleSettingsClick}
     >
       <div className={styles.switchWrapper}>
         <Switch
@@ -33,7 +31,6 @@ const WriteAgentItem = ({ name, id, status }) => {
           isActive={status}
         />
       </div>
-
      
     </ItemWrapper>
   )

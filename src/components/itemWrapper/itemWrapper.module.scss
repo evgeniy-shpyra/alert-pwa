@@ -1,20 +1,26 @@
 .container {
   position: relative;
-  background-color: #fff;
+  background: linear-gradient(rgb(241 255 253), rgb(255 255 255));
   border-radius: 10px;
 
   flex: 0 0 calc(50% - 10px);
   height: 90px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 
-  &.empty{
+  &.empty {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(255, 255, 255, 0.2)
   }
+
+  &.danger {
+    background: linear-gradient(rgb(255, 236, 236), rgb(210, 210, 251));
+  }
+  transition: background 0.5s ease;
 }
 
-.settings{
+.settings {
   position: absolute;
   top: 10px;
   left: 10px;

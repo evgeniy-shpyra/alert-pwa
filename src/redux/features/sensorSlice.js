@@ -39,7 +39,11 @@ export const sensorSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchSensors.fulfilled, (state, { payload }) => {
       state.isLoading = false
-      state.sensors = payload.map((s) => ({ ...s, status: null, actionId: s.action_id }))
+      state.sensors = payload.map((s) => ({
+        ...s,
+        status: null,
+        actionId: s.action_id,
+      }))
     })
     builder.addCase(fetchSensors.pending, (state, action) => {
       state.isLoading = true

@@ -1,0 +1,108 @@
+.container {
+  box-sizing: border-box;
+  height: 100%;
+  overflow: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.title {
+  position: sticky;
+  top: 0px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  padding-bottom: 20px;
+
+  font-weight: 500;
+  color: #616161;
+  gap: 10px;
+  backdrop-filter: saturate(180%) blur(20px);
+  background-color: rgba(251, 251, 253, 0.3);
+
+  padding: 15px 0 10px 0;
+}
+
+.items {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 5px 10px 0 10px;
+}
+
+.item {
+  position: relative;
+
+  border-radius: 10px;
+  flex: 0 0 calc(50% - 10px);
+  height: 90px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(rgb(255 236 236), rgb(210 210 251));
+  .name {
+    color: #424242;
+    font-size: 16px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 123px;
+    text-overflow: ellipsis;
+  }
+}
+
+.switchContainer {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+  &.lock {
+    pointer-events: none;
+  }
+}
+
+.linkContainer {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+
+  width: 32px;
+  height: 32px;
+}
+
+.buttonContainer {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.selectContainer {
+  position: absolute;
+  right: 10px;
+  bottom: 9px;
+  select {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #424242;
+  }
+}
+
+.removeBtn{
+  position: absolute;
+  right: 6px;
+  top: 7px;
+  transform: rotate(45deg);
+
+  height: 32px;
+  width: 32px;
+}

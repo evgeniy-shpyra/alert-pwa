@@ -14,6 +14,7 @@ import { hubHostname } from '../../../api/hub'
 import Notification from '../../notification/Notification'
 import { createDevice, fetchDevices } from '../../../redux/features/deviceSlice'
 import { createSensor, fetchSensors } from '../../../redux/features/sensorSlice'
+import ModalWindow from '../../modalWindow/ModalWindow'
 
 const ConnectedConfirm = ({ handleSetError, handleNextStep }) => {
   const isLoading = useSelector((state) => state.system.agentLoading)
@@ -22,7 +23,7 @@ const ConnectedConfirm = ({ handleSetError, handleNextStep }) => {
 
   const handleConnected = async () => {
     const response = await dispatch(fetchWifiNetworks())
-    if (response.meta.rejectedWithValue) {
+    if (response.error) {
       handleSetError('Не вдалося зʼєднатися з присироєм')
       return
     }
@@ -56,7 +57,7 @@ const DisconnectConfirm = ({
       )
     }
 
-    if (response && response.meta.rejectedWithValue) {
+    if (response && response.error) {
       setIsLoading(false)
       handleSetError('Не вдалося зберегти дані на hub')
       return
@@ -110,7 +111,7 @@ const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
     const response = await dispatch(
       saveAgentData({ name, password, ssid, hubIp: hubHostname })
     )
-    if (response.meta.rejectedWithValue) {
+    if (response.error) {
       handleSetError('Не вдалося зберегти дані на пристрої')
       return
     }
@@ -148,7 +149,7 @@ const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
             <option value='' disabled='disabled' selected='selected'>
               Виберіть надзвичайну ситуацію
             </option>
-            {actions.map(({name, id}) => (
+            {actions.map(({ name, id }) => (
               <option key={name} value={id}>
                 {name}
               </option>
@@ -190,30 +191,32 @@ const AddingAgent = ({ onClose, deviceType }) => {
   }
 
   return (
-    <div className={styles.content}>
-      {step === 1 && (
-        <ConnectedConfirm
-          handleSetError={handleSetError}
-          handleNextStep={handleNextStep}
-        />
-      )}
-      {step === 2 && (
-        <AgentConfig
-          handleSetError={handleSetError}
-          handleNextStep={handleNextStep}
-          deviceType={deviceType}
-        />
-      )}
-      {step === 3 && (
-        <DisconnectConfirm
-          handleSetError={handleSetError}
-          handleNextStep={handleNextStep}
-          deviceType={deviceType}
-          payload={payloadRef.current}
-        />
-      )}
-      {error && <Notification type='error' title='Помилка' text={error} />}
-    </div>
+    <ModalWindow onClose={onClose}>
+      <div className={styles.content}>
+        {step === 1 && (
+          <ConnectedConfirm
+            handleSetError={handleSetError}
+            handleNextStep={handleNextStep}
+          />
+        )}
+        {step === 2 && (
+          <AgentConfig
+            handleSetError={handleSetError}
+            handleNextStep={handleNextStep}
+            deviceType={deviceType}
+          />
+        )}
+        {step === 3 && (
+          <DisconnectConfirm
+            handleSetError={handleSetError}
+            handleNextStep={handleNextStep}
+            deviceType={deviceType}
+            payload={payloadRef.current}
+          />
+        )}
+        {error && <Notification type='error' title='Помилка' text={error} />}
+      </div>
+    </ModalWindow>
   )
 }
 

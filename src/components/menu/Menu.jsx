@@ -6,9 +6,10 @@ import MenuBtnContainer from './menuButton/MenuBtn'
 import AgentPage from '../../pages/agent/AgentPage'
 import UsersPage from '../../pages/users/UsersPage'
 import SystemPage from '../../pages/system/SystemPage'
+import ActionPage from '../../pages/actions/ActionPage'
 
 const Menu = () => {
-  const menusName = ['Пристрої', 'Система', 'Користувачі']
+  const menusName = ['Пристрої', 'Надзвичайні ситуації', 'Користувачі']
 
   const sliderRef = React.useRef()
 
@@ -53,7 +54,7 @@ const Menu = () => {
       </PageWrapper>
 
       <PageWrapper>
-        <SystemPage />
+        <ActionPage />
       </PageWrapper>
 
       <PageWrapper>

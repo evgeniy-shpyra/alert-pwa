@@ -1,23 +1,15 @@
 import React from 'react'
 import styles from './readAgentItem.module.scss'
 import ItemWrapper from '../../itemWrapper/ItemWrapper'
-import Switch from '../../switch/Switch'
 import { useDispatch } from 'react-redux'
-import { changeDeviceStatus } from '../../../redux/features/deviceSlice'
 import Tag from '../../tag/Tag'
 
 const ReadAgentItem = ({ name, id, status, actionId }) => {
-  const dispatch = useDispatch()
   const [isLock, setIsLock] = React.useState(false)
+  const [isOpenSettings, setIsOpenSettings] = React.useState(false)
 
-  const handleToggleStatus = async () => {
-    setIsLock(true)
-    await dispatch(changeDeviceStatus(id))
-    setIsLock(false)
-  }
-
-  const handleSettingsClick = () => {
-    setIsSettings(true)
+  const handleClickSettings = () => {
+    setIsOpenSettings(true)
   }
 
   let tagText = 'text'
@@ -26,11 +18,11 @@ const ReadAgentItem = ({ name, id, status, actionId }) => {
   switch (status) {
     case true:
       tagType = 'error'
-      tagText = "Тривога"
+      tagText = 'Активний'
       break
     case false:
       tagType = 'success'
-      tagText = "Добре"
+      tagText = 'Не активний'
       break
     default:
       tagType = 'default'
@@ -41,7 +33,8 @@ const ReadAgentItem = ({ name, id, status, actionId }) => {
     <ItemWrapper
       name={name}
       isOnline={status !== null}
-      onSettingsClick={handleSettingsClick}
+      isDanger={status === true}
+      onSettingsClick={handleClickSettings}
     >
       <div className={styles.tag}>
         <Tag text={tagText} type={tagType} />

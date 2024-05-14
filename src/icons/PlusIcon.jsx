@@ -1,7 +1,7 @@
 import React from 'react'
 
-const PlusIcon = () => {
-  const fill = '#757575'
+const PlusIcon = ({ color }) => {
+  const fill = color ? color : '#757575'
   return (
     <svg
       width='32'

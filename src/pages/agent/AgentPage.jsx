@@ -50,20 +50,12 @@ const AgentPage = () => {
       </Items>
 
       {(isAddingDevice || isAddingSensor) && (
-        <ModalWindow
+        <AddingDevice
           onClose={() =>
             isAddingDevice ? setIsAddingDevice(false) : setIsAddingSensor(false)
           }
-        >
-          <AddingDevice
-            onClose={() =>
-              isAddingDevice
-                ? setIsAddingDevice(false)
-                : setIsAddingSensor(false)
-            }
-            deviceType={isAddingDevice ? 'write' : 'read'}
-          />
-        </ModalWindow>
+          deviceType={isAddingDevice ? 'write' : 'read'}
+        />
       )}
     </div>
   )
