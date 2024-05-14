@@ -7,11 +7,12 @@ import { fetchDevices, setDeviceStatus } from './redux/features/deviceSlice'
 import ws from './api/hub/ws.js'
 import { fetchActions } from './redux/features/actionSlice'
 import Menu from './components/menu/Menu.jsx'
-import { fetchSensors } from './redux/features/sensorSlice.js'
+import { fetchSensors, setSensorStatus } from './redux/features/sensorSlice.js'
+import { pingSystem } from './redux/features/systemSlice.js'
 
 const wsHandler = (dispatch) => {
   const onOpen = () => {
-    console.log('WS: ok')
+    dispatch(pingSystem())
   }
   const onMessage = (message) => {
     console.log(message)
@@ -22,19 +23,14 @@ const wsHandler = (dispatch) => {
       case 'deviceStatus':
         dispatch(setDeviceStatus({ id: payload.id, status: payload.status }))
         break
-      //   case 'threat':
-      //     dispatch(
-      //       changeMissileStatus({ id: payload.id, status: payload.status })
-      //     )
-      //     break
-      //   case 'deviceOnline':
-      //     dispatch(
-      //       toggleDeviceOnline({ id: payload.id, isOnline: payload.isOnline })
-      //     )
-      //     break
+      case 'sensorStatus':
+        dispatch(setSensorStatus({ id: payload.id, status: payload.status }))
+        break
     }
   }
-  const onError = () => {}
+  const onError = () => {
+    console.log('error')
+  }
 
   ws({ onOpen, onMessage, onError })
 }
@@ -67,13 +63,19 @@ const App = () => {
   }, [isAuthorized])
 
   if (isLoadingUser || isLoadingDevice || isLoadingAction || isLoadingSensor) {
-    return <Loading />
+    return
   }
 
   return (
-    <Routes>
-      <Route path='/' element={<Menu />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path='/' element={<Menu />} />
+      </Routes>
+      {(isLoadingUser ||
+        isLoadingDevice ||
+        isLoadingAction ||
+        isLoadingSensor) && <Loading />}
+    </>
   )
 }
 

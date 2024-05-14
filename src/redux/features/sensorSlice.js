@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchSensorsApi } from '../../api/hub/sensor'
+import { createSensorApi, fetchSensorsApi } from '../../api/hub/sensor'
 
 export const fetchSensors = createAsyncThunk(
   'sensor/fetchSensors',
@@ -12,6 +12,16 @@ export const fetchSensors = createAsyncThunk(
   }
 )
 
+export const createSensor = createAsyncThunk(
+  'sensor/createSensor',
+  async ({ name, actionId }, thunkApi) => {
+    const [errors] = await createSensorApi({ name, actionId })
+    if (errors) {
+      return thunkApi.rejectWithValue(errors)
+    }
+  }
+)
+
 const initialState = {
   sensors: [],
   isLoading: true,
@@ -21,14 +31,15 @@ export const sensorSlice = createSlice({
   name: 'sensor',
   initialState,
   reducers: {
-    toggleDeviceOnline: (state, { payload }) => {
-      state.sensors = state.sensors
+    setSensorStatus: (state, { payload }) => {
+      const sensor = state.sensors.find((d) => d.id === payload.id)
+      if (sensor) sensor.status = payload.status
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchSensors.fulfilled, (state, { payload }) => {
       state.isLoading = false
-      state.sensors = payload.map((d) => ({ ...d, status: null }))
+      state.sensors = payload.map((s) => ({ ...s, status: null, actionId: s.action_id }))
     })
     builder.addCase(fetchSensors.pending, (state, action) => {
       state.isLoading = true
@@ -39,6 +50,6 @@ export const sensorSlice = createSlice({
   },
 })
 
-export const { toggleDeviceOnline } = sensorSlice.actions
+export const { setSensorStatus } = sensorSlice.actions
 
 export default sensorSlice.reducer

@@ -4,7 +4,7 @@
   border-radius: 10px;
 
   flex: 0 0 calc(50% - 10px);
-  height: 120px;
+  height: 90px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 
   &.empty{
@@ -25,7 +25,7 @@
 
 .label {
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   left: 10px;
   display: flex;
   align-items: center;

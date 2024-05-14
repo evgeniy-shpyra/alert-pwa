@@ -3,12 +3,12 @@ import './menu.scss'
 import Slider from 'react-slick'
 import PageWrapper from './pageWrapper/PageWrapper'
 import MenuBtnContainer from './menuButton/MenuBtn'
-import DevicePage from '../../pages/device/DevicePage'
+import AgentPage from '../../pages/agent/AgentPage'
 import UsersPage from '../../pages/users/UsersPage'
 import SystemPage from '../../pages/system/SystemPage'
 
 const Menu = () => {
-  const menusName = ['Система', 'Пристрої', 'Користувачі']
+  const menusName = ['Пристрої', 'Система', 'Користувачі']
 
   const sliderRef = React.useRef()
 
@@ -49,14 +49,13 @@ const Menu = () => {
   return (
     <Slider {...settings}>
       <PageWrapper>
-        <SystemPage />
+        <AgentPage />
       </PageWrapper>
 
       <PageWrapper>
-        <DevicePage />
+        <SystemPage />
       </PageWrapper>
 
-    
       <PageWrapper>
         <UsersPage />
       </PageWrapper>

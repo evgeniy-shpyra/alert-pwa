@@ -1,16 +1,14 @@
 import React from 'react'
-import styles from './deviceItem.module.scss'
+import styles from './readAgentItem.module.scss'
 import ItemWrapper from '../../itemWrapper/ItemWrapper'
 import Switch from '../../switch/Switch'
 import { useDispatch } from 'react-redux'
 import { changeDeviceStatus } from '../../../redux/features/deviceSlice'
-import ModalWindow from '../../modalWindow/ModalWindow'
-import AddingDevice from '../addingDevice/AddingDevice'
+import Tag from '../../tag/Tag'
 
-const DeviceItem = ({ name, id, status }) => {
+const ReadAgentItem = ({ name, id, status, actionId }) => {
   const dispatch = useDispatch()
   const [isLock, setIsLock] = React.useState(false)
-  const [isSettings, setIsSettings] = React.useState(false)
 
   const handleToggleStatus = async () => {
     setIsLock(true)
@@ -22,8 +20,21 @@ const DeviceItem = ({ name, id, status }) => {
     setIsSettings(true)
   }
 
-  const handleCloseModal = () => {
-    setIsSettings(false)
+  let tagText = 'text'
+  let tagType = ''
+
+  switch (status) {
+    case true:
+      tagType = 'error'
+      tagText = "Тривога"
+      break
+    case false:
+      tagType = 'success'
+      tagText = "Добре"
+      break
+    default:
+      tagType = 'default'
+      tagText = 'Не відомо'
   }
 
   return (
@@ -32,17 +43,11 @@ const DeviceItem = ({ name, id, status }) => {
       isOnline={status !== null}
       onSettingsClick={handleSettingsClick}
     >
-      <div className={styles.switchWrapper}>
-        <Switch
-          isLock={isLock}
-          onClick={handleToggleStatus}
-          isActive={status}
-        />
+      <div className={styles.tag}>
+        <Tag text={tagText} type={tagType} />
       </div>
-
-     
     </ItemWrapper>
   )
 }
 
-export default DeviceItem
+export default ReadAgentItem

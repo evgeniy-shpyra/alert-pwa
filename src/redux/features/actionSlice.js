@@ -13,7 +13,7 @@ export const fetchActions = createAsyncThunk(
 )
 
 const initialState = {
-  actions: null,
+  actions: [],
   isLoading: true,
 }
 

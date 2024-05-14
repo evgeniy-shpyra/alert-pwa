@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { fetchWifiNetworksApi, saveAgentConfigApi } from '../../api/agent/agent'
+import { pingSystemApi } from '../../api/hub/system'
 
 export const fetchWifiNetworks = createAsyncThunk(
   'system/getWifiNetworks',
@@ -21,9 +22,18 @@ export const saveAgentData = createAsyncThunk(
     return data
   }
 )
+export const pingSystem = createAsyncThunk(
+  'system/pingSystem',
+  async (data, thunkApi) => {
+    const [errors] = await pingSystemApi(data)
+    if (errors) {
+      return thunkApi.rejectWithValue(errors)
+    }
+    return data
+  }
+)
 
 const initialState = {
-  isConnectedToDevice: false,
   wifiNetworks: [],
   agentLoading: false,
 }
@@ -31,15 +41,10 @@ const initialState = {
 export const systemSlice = createSlice({
   name: 'system',
   initialState,
-  reducers: {
-    toggleConnectedToDevice: (state, { payload }) => {
-      state.isConnectedToDevice = payload
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchWifiNetworks.fulfilled, (state, { payload }) => {
       state.agentLoading = false
-      state.isConnectedToDevice = true
       state.wifiNetworks = payload.ssids
     })
     builder.addCase(fetchWifiNetworks.pending, (state, action) => {
@@ -47,7 +52,6 @@ export const systemSlice = createSlice({
     })
     builder.addCase(fetchWifiNetworks.rejected, (state, action) => {
       state.agentLoading = false
-      state.isConnectedToDevice = false
     })
 
     builder.addCase(saveAgentData.fulfilled, (state, { payload }) => {
@@ -62,6 +66,6 @@ export const systemSlice = createSlice({
   },
 })
 
-export const { toggleConnectedToDevice } = systemSlice.actions
+export const {} = systemSlice.actions
 
 export default systemSlice.reducer
