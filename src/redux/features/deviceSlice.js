@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { changeDeviceStatusApi, fetchDevicesApi } from '../../api/device'
+import { changeDeviceStatusApi, createDeviceApi, fetchDevicesApi } from '../../api/hub/device'
 
 export const fetchDevices = createAsyncThunk(
   'device/fetchDevices',
@@ -15,7 +15,6 @@ export const fetchDevices = createAsyncThunk(
 export const changeDeviceStatus = createAsyncThunk(
   'device/changeDeviceStatus',
   async (id, thunkApi) => {
-   
     const device = thunkApi.getState().device.devices.find((d) => d.id === id)
     if (!device) {
       return thunkApi.rejectWithValue('Incorrect device id id')
@@ -26,6 +25,18 @@ export const changeDeviceStatus = createAsyncThunk(
       return thunkApi.rejectWithValue(errors)
     }
     return payload
+  }
+)
+
+
+export const createDevice = createAsyncThunk(
+  'device/createDevice',
+  async (name, thunkApi) => {
+   
+    const [errors] = await createDeviceApi(name)
+    if (errors) {
+      return thunkApi.rejectWithValue(errors)
+    }
   }
 )
 

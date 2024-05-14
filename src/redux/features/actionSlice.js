@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchActionsApi } from '../../api/action'
+import { fetchActionsApi } from '../../api/hub/action'
 
 export const fetchActions = createAsyncThunk(
   'alarm/fetchActions',

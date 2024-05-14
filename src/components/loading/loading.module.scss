@@ -1,12 +1,14 @@
-.wrapper{
-  height: 100vh;
+.wrapper {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
   width: 100%;
-  background-color: #F2EFEB;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: saturate(180%) blur(20px);
 }
-
 
 @keyframes appearance {
   from {
@@ -17,9 +19,9 @@
   }
 }
 
-.title{
+.title {
   opacity: 0;
   font-size: 16px;
-  color: #605E5C;
-  animation: 0.2s ease 0.5s 1 forwards appearance;
+  color: #605e5c;
+  animation: 0.2s ease 0s 1 forwards appearance;
 }

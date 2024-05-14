@@ -1,0 +1,41 @@
+
+@keyframes notificationAppearance {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.container {
+  padding: 12px 15px;
+  position: absolute;
+  bottom: 40px;
+  right: 10px;
+  opacity: 0;
+  animation: 0.2s ease 0s 1 forwards notificationAppearance;
+  border-radius: 4px;
+
+  &.success {
+    background-color: #dae5e0;
+    border: 1px solid #afc9bc;
+  }
+  &.error {
+    background-color: #fff2f2;
+    border: 1px solid #e59595;
+  }
+}
+
+.title {
+  color: #424242;
+  font-size: 16px;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+
+.text {
+  color: #757575;
+  font-size: 14px;
+}

@@ -6,6 +6,12 @@
   flex: 0 0 calc(50% - 10px);
   height: 120px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+  &.empty{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .settings{

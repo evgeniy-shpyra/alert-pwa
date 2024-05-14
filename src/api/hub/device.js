@@ -25,3 +25,22 @@ export const changeDeviceStatusApi = async (deviceId, status) => {
   }
   return [null, payload]
 }
+
+export const createDeviceApi = async (name) => {
+  try {
+    const response = await fetch(`${urlHttp}/device`, {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response.status !== 200) {
+      return ["Error"]
+    }
+    return [null]
+  } catch (e) {
+    return [e.message]
+  }
+}

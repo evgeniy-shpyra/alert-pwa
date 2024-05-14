@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchSensorsApi } from '../../api/sensor'
+import { fetchSensorsApi } from '../../api/hub/sensor'
 
 export const fetchSensors = createAsyncThunk(
   'sensor/fetchSensors',

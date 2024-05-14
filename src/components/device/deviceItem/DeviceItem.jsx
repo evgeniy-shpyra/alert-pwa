@@ -5,7 +5,7 @@ import Switch from '../../switch/Switch'
 import { useDispatch } from 'react-redux'
 import { changeDeviceStatus } from '../../../redux/features/deviceSlice'
 import ModalWindow from '../../modalWindow/ModalWindow'
-import Settings from '../settings/Settings'
+import AddingDevice from '../addingDevice/AddingDevice'
 
 const DeviceItem = ({ name, id, status }) => {
   const dispatch = useDispatch()
@@ -19,7 +19,6 @@ const DeviceItem = ({ name, id, status }) => {
   }
 
   const handleSettingsClick = () => {
-    console.log('click')
     setIsSettings(true)
   }
 
@@ -41,11 +40,7 @@ const DeviceItem = ({ name, id, status }) => {
         />
       </div>
 
-      {isSettings && (
-        <ModalWindow onClose={handleCloseModal}>
-          <Settings device={{ name, id, status }} />
-        </ModalWindow>
-      )}
+     
     </ItemWrapper>
   )
 }
