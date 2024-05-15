@@ -6,7 +6,7 @@ const ws = (handlers = {}, token) => {
   const onClose = handlers.onClose || null
   const onError = handlers.onError || null
 
-  let queryToken = crypto.randomUUID()
+  let queryToken = Math.random()
   if (token && token.length) {
     queryToken = token
   }

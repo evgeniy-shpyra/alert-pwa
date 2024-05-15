@@ -40,10 +40,7 @@ const App = () => {
   const [isLoading, setIsLoading] = React.useState(true)
 
   const dispatch = useDispatch()
-  const {
-    isAuthorized,
-    token,
-  } = useSelector((state) => state.user)
+  const { isAuthorized, token } = useSelector((state) => state.user)
   const fetchData = async () => {
     setIsLoading(true)
     const promises = [
@@ -64,7 +61,7 @@ const App = () => {
     if (isAuthorized !== true) return
     wsHandler(dispatch, token)
     fetchData()
-  }, [isAuthorized])
+  }, [isAuthorized, token])
 
   React.useEffect(() => {
     if (isAuthorized === false) navigate('/login')
