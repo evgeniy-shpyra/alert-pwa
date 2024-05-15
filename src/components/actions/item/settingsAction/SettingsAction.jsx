@@ -15,6 +15,7 @@ import SuccessButton from '../../../button/SuccessButton'
 import Notification from '../../../notification/Notification'
 import PlusIcon from '../../../../icons/PlusIcon'
 import { deleteAction } from '../../../../redux/features/actionSlice'
+import ConfirmWindow from '../../../confirmWindow/ConfirmWindow'
 
 const SettingsItem = ({
   writeId,
@@ -97,6 +98,8 @@ const SettingsAction = ({ onClose, action }) => {
   const [items, setItems] = React.useState([])
   const [actionName, setActionName] = React.useState('')
 
+  const [isOpenConfirm, setIsOpenConfirm] = React.useState(false)
+
   React.useEffect(() => {
     if (isLoading) return
 
@@ -161,6 +164,21 @@ const SettingsAction = ({ onClose, action }) => {
     }, 5000)
   }
 
+
+  const handleDelete = async () => {
+    setIsOpenConfirm(false)
+    setIsDelateLoading(true)
+    const response = await dispatch(deleteAction(action.id))
+
+    if (response && response.error) {
+      handleSetError('Не вдалося видалити надзвичайну ситуацію')
+      setIsDelateLoading(false)
+      return
+    }
+    setIsDelateLoading(false)
+    onClose()
+  }
+
   const handleSave = async () => {
     let dataForServer = items.map((i) => {
       const item = {}
@@ -188,6 +206,11 @@ const SettingsAction = ({ onClose, action }) => {
 
     dataForServer = dataForServer.filter((d) => Object.keys(d).length)
 
+    if(!dataForServer.length){
+      onClose()
+      return 
+    }
+
     const response = await dispatch(bulkUpdateDevicesActions(dataForServer))
 
     if (response && response.meta.rejectedWithValue) {
@@ -198,25 +221,15 @@ const SettingsAction = ({ onClose, action }) => {
     onClose()
   }
 
-  const handleDelete = async () => {
-    setIsDelateLoading(true)
-    const response = await dispatch(deleteAction(action.id))
-  
-    if (response && response.error) {
-      handleSetError('Не вдалося видалити надзвичайну ситуацію')
-      setIsDelateLoading(false)
-      return
-    }
-    setIsDelateLoading(false)
-    onClose()
-  }
-
   return (
     <ModalWindow onClose={onClose}>
       <div className={styles.container}>
         <div className={styles.title}>
           {actionName}
-          <div onClick={handleDelete} className={styles.removeBtn}>
+          <div
+            onClick={() => setIsOpenConfirm(true)}
+            className={styles.removeBtn}
+          >
             <PlusIcon color='#cc1414' />
           </div>
         </div>
@@ -226,11 +239,21 @@ const SettingsAction = ({ onClose, action }) => {
           ))}
         </div>
         <div className={styles.buttonContainer}>
-          <SuccessButton onClick={handleSave}>Зберегти</SuccessButton>
+          <SuccessButton onClick={handleSave}>
+            Зберегти
+          </SuccessButton>
         </div>
 
-        {isLoading || isDelateLoading && <Loading />}
+        {isLoading || (isDelateLoading && <Loading />)}
       </div>
+      {isOpenConfirm && (
+        <ConfirmWindow
+          onClose={() => setIsOpenConfirm(false)}
+          onClick={handleDelete}
+          text='Видатити надзвичайну ситуацію?'
+          buttonText='Видалити'
+        />
+      )}
       {error && <Notification type='error' title='Помилка' text={error} />}
     </ModalWindow>
   )

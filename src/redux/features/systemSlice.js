@@ -24,8 +24,9 @@ export const saveAgentData = createAsyncThunk(
 )
 export const pingSystem = createAsyncThunk(
   'system/pingSystem',
-  async (data, thunkApi) => {
-    const [errors] = await pingSystemApi(data)
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().user.token
+    const [errors] = await pingSystemApi({ token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -44,24 +45,7 @@ export const systemSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchWifiNetworks.fulfilled, (state, { payload }) => {
-      state.agentLoading = false
       state.wifiNetworks = payload.ssids
-    })
-    builder.addCase(fetchWifiNetworks.pending, (state, action) => {
-      state.agentLoading = true
-    })
-    builder.addCase(fetchWifiNetworks.rejected, (state, action) => {
-      state.agentLoading = false
-    })
-
-    builder.addCase(saveAgentData.fulfilled, (state, { payload }) => {
-      state.agentLoading = false
-    })
-    builder.addCase(saveAgentData.pending, (state, action) => {
-      state.agentLoading = true
-    })
-    builder.addCase(saveAgentData.rejected, (state, action) => {
-      state.agentLoading = false
     })
   },
 })

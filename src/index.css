@@ -18,4 +18,9 @@
 body {
   font-family: inter;
   overflow: hidden;
+  background: linear-gradient(rgb(255, 255, 255), rgb(12, 12, 78));
+}
+
+#root{
+  height: 100vh;
 }

@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { createSensorApi, fetchSensorsApi } from '../../api/hub/sensor'
+import {
+  createSensorApi,
+  deleteSensorApi,
+  fetchSensorsApi,
+} from '../../api/hub/sensor'
 
 export const fetchSensors = createAsyncThunk(
   'sensor/fetchSensors',
   async (_, thunkApi) => {
-    const [errors, payload] = await fetchSensorsApi()
+    const token = thunkApi.getState().user.token
+    const [errors, payload] = await fetchSensorsApi({ token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -15,10 +20,23 @@ export const fetchSensors = createAsyncThunk(
 export const createSensor = createAsyncThunk(
   'sensor/createSensor',
   async ({ name, actionId }, thunkApi) => {
-    const [errors] = await createSensorApi({ name, actionId })
+    const token = thunkApi.getState().user.token
+    const [errors] = await createSensorApi({ name, actionId, token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
+  }
+)
+
+export const deleteSensor = createAsyncThunk(
+  'sensor/delete',
+  async (sensorId, thunkApi) => {
+    const token = thunkApi.getState().user.token
+    const [errors] = await deleteSensorApi({ id: sensorId, token })
+    if (errors) {
+      return thunkApi.rejectWithValue(errors)
+    }
+    return sensorId
   }
 )
 
@@ -37,19 +55,16 @@ export const sensorSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(deleteSensor.fulfilled, (state, { payload }) => {
+      state.sensors = state.sensors.filter((d) => d.id !== payload)
+    })
+
     builder.addCase(fetchSensors.fulfilled, (state, { payload }) => {
-      state.isLoading = false
       state.sensors = payload.map((s) => ({
         ...s,
         status: null,
         actionId: s.action_id,
       }))
-    })
-    builder.addCase(fetchSensors.pending, (state, action) => {
-      state.isLoading = true
-    })
-    builder.addCase(fetchSensors.rejected, (state, action) => {
-      state.isLoading = false
     })
   },
 })

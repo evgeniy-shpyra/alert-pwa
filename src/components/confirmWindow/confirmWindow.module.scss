@@ -1,0 +1,42 @@
+@keyframes confirmBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  animation: 0.2s ease 0s 1 forwards confirmBackground;
+}
+
+.content {
+  pointer-events: all;
+
+  min-height: 200px;
+  width: 100%;
+  margin: 0 20px;
+
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}

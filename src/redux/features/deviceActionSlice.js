@@ -7,7 +7,8 @@ import {
 export const fetchDevicesActions = createAsyncThunk(
   'deviceAction/fetchDevicesActions',
   async (_, thunkApi) => {
-    const [errors, payload] = await fetchDevicesActionsApi()
+    const token = thunkApi.getState().user.token
+    const [errors, payload] = await fetchDevicesActionsApi({ token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -18,14 +19,16 @@ export const fetchDevicesActions = createAsyncThunk(
 export const bulkUpdateDevicesActions = createAsyncThunk(
   'deviceAction/bulkUpdateDevicesActions',
   async (devicesActions, thunkApi) => {
-    const [errors] = await bulkUpdateDevicesActionsApi(devicesActions)
+    const token = thunkApi.getState().user.token
+    const [errors] = await bulkUpdateDevicesActionsApi({
+      devicesActions,
+      token,
+    })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
   }
 )
-
-
 
 const initialState = {
   deviceAction: [],
@@ -60,8 +63,6 @@ export const deviceActionSlice = createSlice({
     builder.addCase(bulkUpdateDevicesActions.rejected, (state, action) => {
       state.isLoading = false
     })
-
-    
   },
 })
 

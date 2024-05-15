@@ -8,7 +8,8 @@ import {
 export const fetchActions = createAsyncThunk(
   'action/fetchActions',
   async (_, thunkApi) => {
-    const [errors, payload] = await fetchActionsApi()
+    const token = thunkApi.getState().user.token
+    const [errors, payload] = await fetchActionsApi({ token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -19,7 +20,8 @@ export const fetchActions = createAsyncThunk(
 export const createAction = createAsyncThunk(
   'action/createAction',
   async (name, thunkApi) => {
-    const [errors] = await createActionApi(name)
+    const token = thunkApi.getState().user.token
+    const [errors] = await createActionApi({ name, token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -29,7 +31,8 @@ export const createAction = createAsyncThunk(
 export const deleteAction = createAsyncThunk(
   'action/deleteAction',
   async (actionId, thunkApi) => {
-    const [errors] = await deleteActionApi(actionId)
+    const token = thunkApi.getState().user.token
+    const [errors] = await deleteActionApi({ id: actionId, token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -55,14 +58,7 @@ export const actionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchActions.fulfilled, (state, { payload }) => {
-      state.isLoading = false
       state.actions = payload
-    })
-    builder.addCase(fetchActions.pending, (state, action) => {
-      state.isLoading = true
-    })
-    builder.addCase(fetchActions.rejected, (state, action) => {
-      state.isLoading = false
     })
 
     builder.addCase(deleteAction.fulfilled, (state, { payload }) => {

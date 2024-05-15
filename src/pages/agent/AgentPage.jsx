@@ -3,12 +3,12 @@ import styles from './agentPage.module.scss'
 import ItemWrapper from '../../components/itemWrapper/ItemWrapper'
 import Items from '../../components/items/Items'
 import SectionsTitle from '../../components/sectionTitle/SectionsTitle'
-import WriteAgentItem from '../../components/agent/writeAgentItem/WriteAgentItem'
+import WriteAgentItem from '../../components/agent/WAItem/WriteAgentItem'
 import PlusIcon from '../../icons/PlusIcon'
 import React from 'react'
 import ModalWindow from '../../components/modalWindow/ModalWindow'
 import AddingDevice from '../../components/agent/addingAgent/AddingAgent'
-import ReadAgentItem from '../../components/agent/readAgentItem/ReadAgentItem'
+import ReadAgentItem from '../../components/agent/RAItem/ReadAgentItem'
 
 const AgentPage = () => {
   const devices = useSelector((state) => state.device.devices)
@@ -16,6 +16,13 @@ const AgentPage = () => {
 
   const [isAddingDevice, setIsAddingDevice] = React.useState(false)
   const [isAddingSensor, setIsAddingSensor] = React.useState(false)
+
+  const handleCloseWD = () => {
+    setIsAddingDevice(false)
+  }
+  const handleCloseRD = () => {
+    setIsAddingSensor(false)
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -49,13 +56,11 @@ const AgentPage = () => {
         </ItemWrapper>
       </Items>
 
-      {(isAddingDevice || isAddingSensor) && (
-        <AddingDevice
-          onClose={() =>
-            isAddingDevice ? setIsAddingDevice(false) : setIsAddingSensor(false)
-          }
-          deviceType={isAddingDevice ? 'write' : 'read'}
-        />
+      {isAddingDevice && (
+        <AddingDevice onClose={handleCloseWD} deviceType='write' />
+      )}
+      {isAddingSensor && (
+        <AddingDevice onClose={handleCloseRD} deviceType='read' />
       )}
     </div>
   )

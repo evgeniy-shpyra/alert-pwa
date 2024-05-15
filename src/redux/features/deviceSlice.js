@@ -1,10 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { changeDeviceStatusApi, createDeviceApi, fetchDevicesApi } from '../../api/hub/device'
+import {
+  changeDeviceStatusApi,
+  createDeviceApi,
+  deleteDeviceApi,
+  fetchDevicesApi,
+} from '../../api/hub/device'
 
 export const fetchDevices = createAsyncThunk(
   'device/fetchDevices',
   async (_, thunkApi) => {
-    const [errors, payload] = await fetchDevicesApi()
+    const token = thunkApi.getState().user.token
+    const [errors, payload] = await fetchDevicesApi({ token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -19,8 +25,12 @@ export const changeDeviceStatus = createAsyncThunk(
     if (!device) {
       return thunkApi.rejectWithValue('Incorrect device id id')
     }
-
-    const [errors, payload] = await changeDeviceStatusApi(id, !device.status)
+    const token = thunkApi.getState().user.token
+    const [errors, payload] = await changeDeviceStatusApi({
+      deviceId: id,
+      status: !device.status,
+      token,
+    })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
@@ -28,15 +38,26 @@ export const changeDeviceStatus = createAsyncThunk(
   }
 )
 
-
 export const createDevice = createAsyncThunk(
   'device/createDevice',
   async (name, thunkApi) => {
-   
-    const [errors] = await createDeviceApi(name)
+    const token = thunkApi.getState().user.token
+    const [errors] = await createDeviceApi({ name, token })
     if (errors) {
       return thunkApi.rejectWithValue(errors)
     }
+  }
+)
+
+export const deleteDevice = createAsyncThunk(
+  'device/delete',
+  async (deviceId, thunkApi) => {
+    const token = thunkApi.getState().user.token
+    const [errors] = await deleteDeviceApi({ id: deviceId, token })
+    if (errors) {
+      return thunkApi.rejectWithValue(errors)
+    }
+    return deviceId
   }
 )
 
@@ -55,19 +76,12 @@ export const deviceSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(changeDeviceStatus.fulfilled, (state, { payload }) => {})
-    builder.addCase(changeDeviceStatus.pending, (state, action) => {})
-    builder.addCase(changeDeviceStatus.rejected, (state, action) => {})
+    builder.addCase(deleteDevice.fulfilled, (state, { payload }) => {
+      state.devices = state.devices.filter((d) => d.id !== payload)
+    })
 
     builder.addCase(fetchDevices.fulfilled, (state, { payload }) => {
-      state.isLoading = false
       state.devices = payload.map((d) => ({ ...d, status: null }))
-    })
-    builder.addCase(fetchDevices.pending, (state, action) => {
-      state.isLoading = true
-    })
-    builder.addCase(fetchDevices.rejected, (state, action) => {
-      state.isLoading = false
     })
   },
 })

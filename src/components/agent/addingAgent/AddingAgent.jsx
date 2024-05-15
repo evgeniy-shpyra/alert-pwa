@@ -16,15 +16,19 @@ import { createDevice, fetchDevices } from '../../../redux/features/deviceSlice'
 import { createSensor, fetchSensors } from '../../../redux/features/sensorSlice'
 import ModalWindow from '../../modalWindow/ModalWindow'
 
-const ConnectedConfirm = ({ handleSetError, handleNextStep }) => {
-  const isLoading = useSelector((state) => state.system.agentLoading)
-
+const ConnectedConfirm = ({
+  handleSetError,
+  handleNextStep,
+  toggleLoading,
+}) => {
   const dispatch = useDispatch()
 
   const handleConnected = async () => {
+    toggleLoading(true)
     const response = await dispatch(fetchWifiNetworks())
     if (response.error) {
       handleSetError('Не вдалося зʼєднатися з присироєм')
+      toggleLoading(false)
       return
     }
     handleNextStep()
@@ -33,7 +37,6 @@ const ConnectedConfirm = ({ handleSetError, handleNextStep }) => {
     <div className={styles.confirmContainer}>
       <p className={styles.message}>Підєднайтеся до wifi мережі прилада</p>
       <Button onClick={handleConnected}>Підєднано</Button>
-      {isLoading && <Loading />}
     </div>
   )
 }
@@ -42,12 +45,12 @@ const DisconnectConfirm = ({
   handleSetError,
   deviceType,
   handleNextStep,
+  toggleLoading,
 }) => {
   const dispatch = useDispatch()
-  const [isLoading, setIsLoading] = React.useState(false)
 
   const handleConnected = async () => {
-    setIsLoading(true)
+    toggleLoading(true)
     let response
     if (deviceType === 'write') {
       response = await dispatch(createDevice(payload.deviceName))
@@ -58,7 +61,7 @@ const DisconnectConfirm = ({
     }
 
     if (response && response.error) {
-      setIsLoading(false)
+      toggleLoading(false)
       handleSetError('Не вдалося зберегти дані на hub')
       return
     }
@@ -70,23 +73,33 @@ const DisconnectConfirm = ({
     }
 
     await dispatch(pingSystem())
-    setIsLoading(false)
+
+    setTimeout(pingSystem, 5000)
+    toggleLoading(false)
     handleNextStep()
   }
   return (
     <div className={styles.confirmContainer}>
       <p className={styles.message}>Підєднайтеся до wifi мережі хабу</p>
       <Button onClick={handleConnected}>Підєднано</Button>
-      {isLoading && <Loading />}
     </div>
   )
 }
 
-const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
+const AgentConfig = ({
+  handleSetError,
+  handleNextStep,
+  deviceType,
+  toggleLoading,
+}) => {
   const dispatch = useDispatch()
   const wifiNetworks = useSelector((state) => state.system.wifiNetworks)
   const actions = useSelector((state) => state.action.actions)
-  const isLoading = useSelector((state) => state.system.agentLoading)
+
+  React.useState(() => {
+    toggleLoading(false)
+  }, [])
+
   const ssidSelectRef = React.useRef(null)
   const actionIdSelectRef = React.useRef(null)
 
@@ -108,10 +121,13 @@ const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
       return
     }
 
+    toggleLoading(true)
+
     const response = await dispatch(
       saveAgentData({ name, password, ssid, hubIp: hubHostname })
     )
     if (response.error) {
+      toggleLoading(false)
       handleSetError('Не вдалося зберегти дані на пристрої')
       return
     }
@@ -122,6 +138,7 @@ const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
       payloadForHub.actionId = actionId
     }
     handleNextStep(payloadForHub)
+    toggleLoading(false)
   }
 
   return (
@@ -129,7 +146,7 @@ const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
       <div className={styles.title}>Додаваннтя присторя виконання</div>
       <div className={styles.form}>
         <Input onChange={setName} value={name} placeholder='Назва пристороя' />
-        <select ref={ssidSelectRef}>
+        <select ref={ssidSelectRef} defaultValue=''>
           <option value='' disabled='disabled' selected='selected'>
             SSID wifi
           </option>
@@ -145,8 +162,8 @@ const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
           placeholder='Пароль від wifi'
         />
         {deviceType === 'read' && (
-          <select ref={actionIdSelectRef}>
-            <option value='' disabled='disabled' selected='selected'>
+          <select defaultValue='' ref={actionIdSelectRef}>
+            <option value='' disabled='disabled'>
               Виберіть надзвичайну ситуацію
             </option>
             {actions.map(({ name, id }) => (
@@ -158,12 +175,13 @@ const AgentConfig = ({ handleSetError, handleNextStep, deviceType }) => {
         )}
       </div>
       <SuccessButton onClick={handleClickBtn}>Зберегти</SuccessButton>
-      {isLoading && <Loading />}
     </div>
   )
 }
 
 const AddingAgent = ({ onClose, deviceType }) => {
+  const [isLoading, setIsLoading] = React.useState(false)
+
   const [error, setError] = React.useState(false)
   const timeoutRef = React.useRef(null)
 
@@ -197,6 +215,7 @@ const AddingAgent = ({ onClose, deviceType }) => {
           <ConnectedConfirm
             handleSetError={handleSetError}
             handleNextStep={handleNextStep}
+            toggleLoading={setIsLoading}
           />
         )}
         {step === 2 && (
@@ -204,6 +223,7 @@ const AddingAgent = ({ onClose, deviceType }) => {
             handleSetError={handleSetError}
             handleNextStep={handleNextStep}
             deviceType={deviceType}
+            toggleLoading={setIsLoading}
           />
         )}
         {step === 3 && (
@@ -212,10 +232,12 @@ const AddingAgent = ({ onClose, deviceType }) => {
             handleNextStep={handleNextStep}
             deviceType={deviceType}
             payload={payloadRef.current}
+            toggleLoading={setIsLoading}
           />
         )}
         {error && <Notification type='error' title='Помилка' text={error} />}
       </div>
+      {isLoading && <Loading />}
     </ModalWindow>
   )
 }

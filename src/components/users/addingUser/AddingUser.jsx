@@ -1,15 +1,13 @@
-// import React from 'react'
 import React from 'react'
-import SuccessButton from '../../components/button/SuccessButton'
-import Input from '../../components/input/Input'
-import styles from './loginPage.module.scss'
-import Notification from '../../components/notification/Notification'
+import styles from './addingUser.module.scss'
+import ModalWindow from '../../modalWindow/ModalWindow'
+import Input from '../../input/Input'
+import SuccessButton from '../../button/SuccessButton'
+import Notification from '../../notification/Notification'
 import { useDispatch } from 'react-redux'
-import { loginUser } from '../../redux/features/userSlice'
-import { useNavigate } from 'react-router'
+import { createUser, fetchUsers } from '../../../redux/features/userSlice'
 
-const LoginPage = () => {
-  const navigate = useNavigate()
+const AddingUser = ({ onClose }) => {
   const dispatch = useDispatch()
   const [error, setError] = React.useState(false)
   const timeoutRef = React.useRef(null)
@@ -29,34 +27,36 @@ const LoginPage = () => {
   const [login, setLogin] = React.useState('')
   const [password, setPassword] = React.useState('')
 
-  const handleLogin = async () => {
-    if (!login.length || !password.length) {
+  const handleSave = async () => {
+    if (!login || !password) {
       handleSetError('Заповніть всі поля')
       return
     }
+    const response = await dispatch(createUser({ login, password }))
 
-    const response = await dispatch(loginUser({ login, password }))
-    if (response.error) {
-      handleSetError('Не вірні дані для входу')
+    if (response && response.error) {
+      handleSetError('Не вдалося створити користувача')
       return
     }
-    navigate('/')
+    dispatch(fetchUsers())
+    onClose()
   }
+
   return (
-    <div className={styles.wrapper}>
+    <ModalWindow onClose={onClose}>
       <div className={styles.container}>
-        <div className={styles.title}>Авторизація</div>
+        <div className={styles.title}>Додаваннтя користувача</div>
         <div className={styles.inputs}>
           <Input value={login} onChange={setLogin} placeholder='Логін' />
           <Input value={password} onChange={setPassword} placeholder='Пароль' />
         </div>
         <div className={styles.btnContainer}>
-          <SuccessButton onClick={handleLogin}>Увійти</SuccessButton>
+          <SuccessButton onClick={handleSave}>Зберегти</SuccessButton>
         </div>
       </div>
       {error && <Notification type='error' title='Помилка' text={error} />}
-    </div>
+    </ModalWindow>
   )
 }
 
-export default LoginPage
+export default AddingUser
