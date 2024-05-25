@@ -40,7 +40,7 @@
 
 .item {
   position: relative;
-
+  max-width: 250px;
   border-radius: 10px;
   flex: 0 0 calc(50% - 10px);
   height: 90px;

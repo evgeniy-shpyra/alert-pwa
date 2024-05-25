@@ -45,7 +45,9 @@ const AddingAction = ({ onClose }) => {
     <ModalWindow onClose={onClose}>
       <div className={styles.container}>
         <div className={styles.title}>Додаваннтя надзвичайної ситуації</div>
-        <Input value={name} onChange={setName} placeholder='Назва' />
+        <div className={styles.inputs}>
+          <Input value={name} onChange={setName} placeholder='Назва' />
+        </div>
         <div className={styles.btnContainer}>
           <SuccessButton onClick={handleSave}>Зберегти</SuccessButton>
         </div>
