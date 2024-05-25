@@ -15,7 +15,8 @@ const ItemWrapper = ({
   onDeleteClick,
   isEmpty,
   onClick,
-  isLock
+  isLock,
+  isProxy,
 }) => {
   if (isEmpty) {
     return (
@@ -51,14 +52,18 @@ const ItemWrapper = ({
       )}
       {onDeleteClick && (
         <div onClick={handleBtnClick} className={styles.delete}>
-          <PlusIcon color="#cc1414" size={23} />
+          <PlusIcon color='#cc1414' size={23} />
         </div>
       )}
 
       <div className={styles.label}>
-        {isOnline === true && <WifiOnIcon />}
-        {isOnline === false && <WifiOffIcon />}
-        <div className={styles.name}>{name}</div>
+        {!isProxy && (
+          <>
+            {isOnline === true && <WifiOnIcon />}
+            {isOnline === false && <WifiOffIcon />}
+          </>
+        )}
+        <div className={styles.name}>{name} {isProxy && " (Proxy)"}</div>
       </div>
     </div>
   )

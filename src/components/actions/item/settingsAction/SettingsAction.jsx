@@ -164,7 +164,6 @@ const SettingsAction = ({ onClose, action }) => {
     }, 5000)
   }
 
-
   const handleDelete = async () => {
     setIsOpenConfirm(false)
     setIsDelateLoading(true)
@@ -206,9 +205,9 @@ const SettingsAction = ({ onClose, action }) => {
 
     dataForServer = dataForServer.filter((d) => Object.keys(d).length)
 
-    if(!dataForServer.length){
+    if (!dataForServer.length) {
       onClose()
-      return 
+      return
     }
 
     const response = await dispatch(bulkUpdateDevicesActions(dataForServer))
@@ -226,12 +225,14 @@ const SettingsAction = ({ onClose, action }) => {
       <div className={styles.container}>
         <div className={styles.title}>
           {actionName}
-          <div
-            onClick={() => setIsOpenConfirm(true)}
-            className={styles.removeBtn}
-          >
-            <PlusIcon color='#cc1414' />
-          </div>
+          {action.id >= 0 && (
+            <div
+              onClick={() => setIsOpenConfirm(true)}
+              className={styles.removeBtn}
+            >
+              <PlusIcon color='#cc1414' />
+            </div>
+          )}
         </div>
         <div className={styles.items}>
           {items.map((i, index) => (
@@ -239,9 +240,7 @@ const SettingsAction = ({ onClose, action }) => {
           ))}
         </div>
         <div className={styles.buttonContainer}>
-          <SuccessButton onClick={handleSave}>
-            Зберегти
-          </SuccessButton>
+          <SuccessButton onClick={handleSave}>Зберегти</SuccessButton>
         </div>
 
         {isLoading || (isDelateLoading && <Loading />)}

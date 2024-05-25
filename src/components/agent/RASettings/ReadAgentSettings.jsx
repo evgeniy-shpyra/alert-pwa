@@ -10,6 +10,7 @@ import Loading from '../../loading/Loading'
 import Notification from '../../notification/Notification'
 
 const ReadAgentSettings = ({ onClose, status, actionId, name, id }) => {
+  console.log(onClose, status, actionId, name, id)
   const dispatch = useDispatch()
   const [error, setError] = React.useState(false)
   const timeoutRef = React.useRef(null)
@@ -75,12 +76,14 @@ const ReadAgentSettings = ({ onClose, status, actionId, name, id }) => {
               <Tag type={tagType} text={tagText} />
             </div>
           </div>
-          <div
-            onClick={() => setIsOpenConfirm(true)}
-            className={styles.removerContainer}
-          >
-            <PlusIcon color='#cc1414' />
-          </div>
+          {id >= 0 && (
+            <div
+              onClick={() => setIsOpenConfirm(true)}
+              className={styles.removerContainer}
+            >
+              <PlusIcon color='#cc1414' />
+            </div>
+          )}
         </div>
         <div className={styles.action}>
           <div className={styles.name}>{action.name}</div>

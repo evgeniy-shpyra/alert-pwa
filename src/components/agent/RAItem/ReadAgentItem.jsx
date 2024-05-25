@@ -35,6 +35,7 @@ const ReadAgentItem = ({ name, id, status, actionId }) => {
       isOnline={status !== null}
       isDanger={status === true}
       onSettingsClick={handleClickSettings}
+      isProxy={id < 0}
     >
       <div className={styles.tag}>
         <Tag text={tagText} type={tagType} />

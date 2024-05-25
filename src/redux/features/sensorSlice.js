@@ -63,7 +63,7 @@ export const sensorSlice = createSlice({
       state.sensors = payload.map((s) => ({
         ...s,
         status: null,
-        actionId: s.action_id,
+        actionId: s.actionId,
       }))
     })
   },
