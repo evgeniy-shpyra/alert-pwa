@@ -1,5 +1,24 @@
 .wrapper {
-  
-  height: 100%;
+  padding-bottom: 40px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.item {
+  height: 90px;
+  width: 100%;
+  background: linear-gradient(rgb(241, 255, 253), rgb(255, 255, 255));
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}

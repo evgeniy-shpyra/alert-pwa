@@ -8,7 +8,7 @@ import ws from './api/hub/ws.js'
 import { fetchActions } from './redux/features/actionSlice'
 import Menu from './components/menu/Menu.jsx'
 import { fetchSensors, setSensorStatus } from './redux/features/sensorSlice.js'
-import { pingSystem } from './redux/features/systemSlice.js'
+import { fetchSystemStatus, pingSystem } from './redux/features/systemSlice.js'
 
 const wsHandler = (dispatch, token) => {
   const onOpen = () => {
@@ -48,6 +48,7 @@ const App = () => {
       dispatch(fetchDevices()),
       dispatch(fetchSensors()),
       dispatch(fetchActions()),
+      dispatch(fetchSystemStatus()),
     ]
     await Promise.all(promises)
     setIsLoading(false)

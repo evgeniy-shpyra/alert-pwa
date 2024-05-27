@@ -18,7 +18,7 @@ export const createSensorApi = async ({ name, actionId, token }) => {
   try {
     const response = await fetch(`${urlHttp}/sensor`, {
       method: 'POST',
-      body: JSON.stringify({ name, action_id: actionId }),
+      body: JSON.stringify({ name, actionId }),
       headers: {
         'Content-Type': 'application/json',
         'authorization': token,

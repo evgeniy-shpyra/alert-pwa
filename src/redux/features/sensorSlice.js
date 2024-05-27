@@ -53,6 +53,9 @@ export const sensorSlice = createSlice({
       const sensor = state.sensors.find((d) => d.id === payload.id)
       if (sensor) sensor.status = payload.status
     },
+    resetSensorStatuses: (state) => {
+      state.sensors = state.sensors.map((s) => ({ ...s, status: null }))
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(deleteSensor.fulfilled, (state, { payload }) => {
@@ -69,6 +72,6 @@ export const sensorSlice = createSlice({
   },
 })
 
-export const { setSensorStatus } = sensorSlice.actions
+export const { setSensorStatus, resetSensorStatuses } = sensorSlice.actions
 
 export default sensorSlice.reducer

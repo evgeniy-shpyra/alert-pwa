@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { fetchWifiNetworksApi, saveAgentConfigApi } from '../../api/agent/agent'
-import { pingSystemApi } from '../../api/hub/system'
+import {
+  changeSystemStatusApi,
+  fetchSystemStatusApi,
+  pingSystemApi,
+} from '../../api/hub/system.js'
+import { resetSensorStatuses } from './sensorSlice.js'
 
 export const fetchWifiNetworks = createAsyncThunk(
   'system/getWifiNetworks',
@@ -33,10 +38,35 @@ export const pingSystem = createAsyncThunk(
     return data
   }
 )
+export const changeSystemStatus = createAsyncThunk(
+  'system/changeSystemStatus',
+  async (status, thunkApi) => {
+    const token = thunkApi.getState().user.token
+    const [errors] = await changeSystemStatusApi({ token, status })
+    if (errors) {
+      return thunkApi.rejectWithValue(errors)
+    }
+    return status
+  }
+)
+export const fetchSystemStatus = createAsyncThunk(
+  'system/fetchSystemStatus',
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().user.token
+    const [errors, payload] = await fetchSystemStatusApi({ token })
+    
+    if (errors) {
+      return thunkApi.rejectWithValue(errors)
+    }
+
+    return payload
+  }
+)
 
 const initialState = {
   wifiNetworks: [],
   agentLoading: false,
+  status: null,
 }
 
 export const systemSlice = createSlice({
@@ -46,6 +76,12 @@ export const systemSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchWifiNetworks.fulfilled, (state, { payload }) => {
       state.wifiNetworks = payload.ssids
+    })
+    builder.addCase(fetchSystemStatus.fulfilled, (state, { payload }) => {
+      state.status = payload.status
+    })
+    builder.addCase(changeSystemStatus.fulfilled, (state, { payload }) => {
+      state.status = payload
     })
   },
 })
